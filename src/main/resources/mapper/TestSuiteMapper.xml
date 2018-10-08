@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fgnb.mapper.TestSuiteMapper">
+
+    <insert id="addTestSuite" useGeneratedKeys="true" keyProperty="testSuiteId">
+        insert into test_suite
+        (testSuiteName,description,projectId,creatorUid,createTime)
+        values
+        (#{testSuiteName},#{description},#{projectId},#{creatorUid},#{createTime})
+    </insert>
+
+    <select id="findTestSuitesByProjectId" resultType="com.fgnb.domain.TestSuite">
+        select *,u1.nickname creatorNickname,u2.nickname updatorNickname from test_suite s
+        LEFT JOIN user u1 on s.creatorUid = u1.userId
+        LEFT JOIN user u2 on s.updatorUid = u2.userId
+        where s.projectId = #{projectId}
+        order by s.createTime desc
+    </select>
+
+    <resultMap id="testSuiteDetailInfo" type="com.fgnb.domain.TestSuite">
+        <id column="testSuiteId" property="testSuiteId"></id>
+        <result column="testSuiteName" property="testSuiteName"></result>
+        <result column="description" property="description"></result>
+        <result column="projectId" property="projectId"></result>
+        <result column="creatorUid" property="creatorUid"></result>
+        <result column="createTime" property="createTime"></result>
+        <result column="updatorUid" property="updatorUid"></result>
+        <result column="updateTime" property="updateTime"></result>
+        <collection ofType="java.lang.Integer" property="testSuiteTestCaseIds">
+            <result column="c_testCaseId"></result>
+        </collection>
+    </resultMap>
+    <select id="getTestSuiteDetailInfoByTestSuiteId" resultMap="testSuiteDetailInfo">
+        select s.testSuiteId,s.testSuiteName,s.description,s.projectId,s.creatorUid,s.createTime,s.updatorUid,s.updateTime,
+        c.testSuiteId c_testSuiteId,c.testCaseId c_testCaseId from test_suite s
+        left join test_suite_test_case c on s.testSuiteId = c.testSuiteId
+        where s.testSuiteId = #{testSuiteId}
+    </select>
+
+    <update id="updateTestSuite">
+        update test_suite
+        <set>
+            <if test="testSuiteName != null and testSuiteName != ''">
+                testSuiteName = #{testSuiteName},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="updatorUid != null">
+                updatorUid = #{updatorUid},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+        </set>
+        where testSuiteId = #{testSuiteId}
+    </update>
+</mapper>

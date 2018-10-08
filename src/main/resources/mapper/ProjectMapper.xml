@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fgnb.mapper.ProjectMapper">
+
+    <sql id="Base_Column_List" >
+        p.projectId,p.projectName,p.description,p.projectType,
+        p.createTime,p.updateTime,p.creatorUid,p.updatorUid
+    </sql>
+    
+    <select id="queryList" resultType="com.fgnb.domain.Project">
+      select
+        <include refid="Base_Column_List"/>,u1.nickname creatorNickname,u2.nickname updatorNickname
+      from
+        project p
+      LEFT JOIN user u1 on p.creatorUid = u1.userId
+      LEFT JOIN user u2 on p.updatorUid = u2.userId
+      <where>
+          <if test="projectType != null">
+              and projectType=#{projectType}
+          </if>
+          <if test="projectName!=null and projectName!=''">
+              and projectName=#{projectName}
+          </if>
+      </where>
+    </select>
+
+    <update id="updateProject">
+        UPDATE project
+        <set>
+            <if test="projectName != null and projectName != ''">
+                projectName = #{projectName},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="projectType != null">
+                projectType = #{projectType},
+            </if>
+            <if test="updatorUid != null">
+                updatorUid = #{updatorUid},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+        </set>
+        WHERE projectId = #{projectId}
+    </update>
+</mapper>

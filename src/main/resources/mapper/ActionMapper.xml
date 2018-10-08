@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fgnb.mapper.ActionMapper">
+
+    <sql id="add_action_columns">
+        actionName,description,projectId,pageId,categoryId,actionType,className,returnValue,creatorUid,createTime
+    </sql>
+
+    <insert id="addAction" useGeneratedKeys="true" keyProperty="actionId">
+        insert into action
+        (<include refid="add_action_columns"></include>)
+        values
+        (#{actionName},#{description},#{projectId},#{pageId},#{categoryId},#{actionType},#{className},#{returnValue},#{creatorUid},#{createTime})
+    </insert>
+
+    <select id="findActionsByPageId" resultType="com.fgnb.domain.Action">
+        select *,u1.nickname creatorNickname,u2.nickname updatorNickname from action a
+        LEFT JOIN user u1 on a.creatorUid = u1.userId
+        LEFT JOIN user u2 on a.updatorUid = u2.userId
+        where a.pageId = #{pageId}
+        order by a.createTime desc
+    </select>
+
+    <update id="updateAction">
+        update action
+        <set>
+            <if test="actionName != null and actionName!=''">
+                actionName = #{actionName},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="categoryId != null">
+                categoryId = #{categoryId},
+            </if>
+            <if test="returnValue != null and returnValue!=''">
+                returnValue = #{returnValue},
+            </if>
+            <if test="updatorUid != null">
+                updatorUid = #{updatorUid},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+        </set>
+        where actionId = #{actionId}
+    </update>
+
+    <resultMap id="ActionDetail" type="com.fgnb.domain.Action">
+        <id column="actionId" property="actionId"/>
+        <result column="actionName" property="actionName"/>
+        <result column="a_description" property="description"/>
+        <result column="a_categoryId" property="categoryId"/>
+        <result column="a_categoryName" property="categoryName"/>
+        <result column="projectId" property="projectId"/>
+        <result column="pageId" property="pageId"/>
+        <result column="actionType" property="actionType"/>
+        <result column="className" property="className"/>
+        <result column="returnValue" property="returnValue"/>
+        <result column="creatorUid" property="creatorUid"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updatorUid" property="updatorUid"/>
+        <result column="updateTime" property="updateTime"/>
+        <collection property="actionParams" ofType="com.fgnb.domain.ActionParam">
+            <id column="p_actionParamId" property="actionParamId"/>
+            <result column="actionParamName" property="actionParamName"/>
+            <result column="p_description" property="description"/>
+        </collection>
+        <collection property="actionVars" ofType="com.fgnb.domain.ActionVar">
+            <id column="actionVarId" property="actionVarId"/>
+            <result column="actionVarName" property="actionVarName"/>
+            <result column="actionVarValue" property="actionVarValue"/>
+            <result column="v_description" property="description"/>
+        </collection>
+        <collection property="actionSteps" ofType="com.fgnb.domain.ActionStep">
+            <id column="actionStepId" property="actionStepId"/>
+            <result column="stepActionId" property="stepActionId"/>
+            <result column="stepActionName" property="stepActionName"/>
+            <result column="actionStepName" property="actionStepName"/>
+            <result column="evaluation" property="evaluation"/>
+            <result column="actionStepNumber" property="actionStepNumber"/>
+            <collection property="actionStepParamValues" ofType="com.fgnb.domain.ActionStepParamValue">
+                <id column="actionStepParamValueId" property="actionStepParamValueId"/>
+                <result column="actionParamId" property="actionParamId"/>
+                <result column="ap_actionParamName" property="actionParamName"/>
+                <result column="ap_description" property="description"/>
+                <result column="actionParamValue" property="actionParamValue"/>
+            </collection>
+        </collection>
+    </resultMap>
+
+    <sql id="getActionDetailInfoByActionIdSql">
+        SELECT
+            a.actionId,a.actionName,a.description a_description,a.projectId,a.pageId,a.categoryId a_categoryId,c.categoryName a_categoryName,a.actionType,
+            a.className,a.returnValue,a.creatorUid,a.createTime,a.updatorUid,a.updateTime,
+            p.actionParamId p_actionParamId,p.actionParamName,p.description p_description,
+            v.actionVarId,v.actionVarName,v.actionVarValue,v.description v_description,
+            s.actionStepId,s.stepActionId,s.actionStepName,s.evaluation,s.actionStepNumber,
+            sa.actionName stepActionName,
+            pv.actionStepParamValueId,pv.actionParamId,pv.actionParamValue,
+            ap.actionParamName ap_actionParamName,ap.description ap_description
+        FROM
+            action a
+        LEFT JOIN category c on c.categoryId = a.categoryId
+        LEFT JOIN action_param p ON a.actionId = p.actionId
+        LEFT JOIN action_var v on a.actionId = v.actionId
+        LEFT JOIN action_step s on a.actionId = s.actionId
+        LEFT JOIN action sa on sa.actionId = s.stepActionId
+        LEFT JOIN action_step_param_value pv on pv.actionStepId = s.actionStepId
+        LEFT JOIN action_param ap on ap.actionParamId = pv.actionParamId
+        where a.actionId = #{actionId}
+    </sql>
+    <select id="getActionDetailInfoByActionId" resultMap="ActionDetail">
+        <include refid="getActionDetailInfoByActionIdSql"/>
+    </select>
+
+    <resultMap id="ActionTree" type="com.fgnb.domain.Action">
+        <id column="actionId" property="actionId"/>
+        <result column="actionName" property="actionName"/>
+        <result column="a_description" property="description"/>
+        <result column="projectId" property="projectId"/>
+        <result column="pageId" property="pageId"/>
+        <result column="actionType" property="actionType"/>
+        <result column="className" property="className"/>
+        <result column="returnValue" property="returnValue"/>
+        <result column="creatorUid" property="creatorUid"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updatorUid" property="updatorUid"/>
+        <result column="updateTime" property="updateTime"/>
+        <collection property="actionParams" ofType="com.fgnb.domain.ActionParam">
+            <id column="p_actionParamId" property="actionParamId"/>
+            <result column="actionParamName" property="actionParamName"/>
+            <result column="p_description" property="description"/>
+        </collection>
+        <collection property="actionVars" ofType="com.fgnb.domain.ActionVar">
+            <id column="actionVarId" property="actionVarId"/>
+            <result column="actionVarName" property="actionVarName"/>
+            <result column="actionVarValue" property="actionVarValue"/>
+            <result column="v_description" property="description"/>
+        </collection>
+        <collection property="actionSteps" ofType="com.fgnb.domain.ActionStep">
+            <id column="actionStepId" property="actionStepId"/>
+            <result column="stepActionId" property="stepActionId"/>
+            <result column="stepActionName" property="stepActionName"/>
+            <result column="actionStepName" property="actionStepName"/>
+            <result column="evaluation" property="evaluation"/>
+            <result column="actionStepNumber" property="actionStepNumber"/>
+            <association column="stepActionId" property="action" select="buildActionTree"></association>
+            <collection property="actionStepParamValues" ofType="com.fgnb.domain.ActionStepParamValue">
+                <id column="actionStepParamValueId" property="actionStepParamValueId"/>
+                <result column="actionParamId" property="actionParamId"/>
+                <result column="ap_actionParamName" property="actionParamName"/>
+                <result column="ap_description" property="description"/>
+                <result column="actionParamValue" property="actionParamValue"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="buildActionTree" resultMap="ActionTree">
+        <include refid="getActionDetailInfoByActionIdSql"/>
+    </select>
+
+    <select id="dynamicQuery" resultType="com.fgnb.domain.Action">
+        select *,u1.nickname creatorNickname,u2.nickname updatorNickname from action a
+        LEFT JOIN user u1 on a.creatorUid = u1.userId
+        LEFT JOIN user u2 on a.updatorUid = u2.userId
+        <where>
+            <if test="actionId != null">
+                and actionId = #{actionId}
+            </if>
+            <if test="actionName != null and actionName != ''">
+                and actionName = #{actionName}
+            </if>
+            <if test="categoryId != null">
+                and categoryId = #{categoryId}
+            </if>
+            <if test="projectId != null">
+                and projectId = #{projectId}
+            </if>
+            <if test="actionType != null">
+                and actionType = #{actionType}
+            </if>
+            <if test="creatorUid != null">
+                and creatorUid = #{creatorUid}
+            </if>
+            <if test="updatorUid != null">
+                and updatorUid = #{updatorUid}
+            </if>
+        </where>
+        order by a.createTime desc
+    </select>
+
+    <select id="findCreatorByProjectIdAndActionType" resultType="map">
+        select a.creatorUid,u.nickname from action a left join user u on a.creatorUid = u.userId
+        where a.projectId = #{projectId} and a.actionType = #{actionType} and a.creatorUid is not null group by a.creatorUid
+    </select>
+
+    <select id="findUpdatorByProjectIdAndActionType" resultType="map">
+        select a.updatorUid,u.nickname from action a left join user u on a.updatorUid = u.userId
+        where a.projectId = #{projectId} and a.actionType = #{actionType} and a.updatorUid is not null group by a.updatorUid
+    </select>
+
+</mapper>

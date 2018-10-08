@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fgnb.mapper.DeviceMapper">
+    <update id="update">
+      UPDATE device
+      <set>
+        <if test="deviceName != null and deviceName!= ''">
+            deviceName = #{deviceName},
+        </if>
+        <if test="phoneIp != null and phoneIp != ''">
+            phoneIp = #{phoneIp},
+        </if>
+        <if test="agentIp!=null and agentIp!= ''">
+            agentIp = #{agentIp},
+        </if>
+        <if test="systemVersion!=null and systemVersion!=''">
+            systemVersion = #{systemVersion},
+        </if>
+        <if test="apiLevel!=null and apiLevel!=''">
+            apiLevel = #{apiLevel},
+        </if>
+        <if test="cpuAbi!=null and cpuAbi!=''">
+            cpuAbi = #{cpuAbi},
+        </if>
+        <if test="cpuInfo!=null and cpuInfo!=''">
+            cpuInfo = #{cpuInfo},
+        </if>
+        <if test="memSize!=null and memSize!=''">
+            memSize = #{memSize},
+        </if>
+        <if test="resolution!=null and resolution!=''">
+            resolution = #{resolution},
+        </if>
+        <if test="imgUrl!=null and imgUrl!=''">
+            imgUrl = #{imgUrl},
+        </if>
+        <if test="deviceType!=null">
+            deviceType = #{deviceType},
+        </if>
+        <if test="status!=null">
+            status = #{status},
+        </if>
+        <if test="stfStatus!=null">
+            stfStatus = #{stfStatus},
+        </if>
+        <if test="macacaStatus!=null">
+            macacaStatus = #{macacaStatus},
+        </if>
+        <if test="lastOnlineTime!=null">
+            lastOnlineTime = #{lastOnlineTime},
+        </if>
+        <if test="lastOfflineTime!=null">
+            lastOfflineTime = #{lastOfflineTime},
+        </if>
+        <if test="userName!=null and userName!=''">
+            userName = #{userName},
+        </if>
+        <if test="createTime!=null">
+            createTime = #{createTime},
+        </if>
+      </set>
+        where deviceId = #{deviceId}
+    </update>
+
+    <select id="queryList" resultType="com.fgnb.domain.Device">
+        SELECT * from device
+        <where>
+            <if test="deviceType!=null">
+                and deviceType = #{deviceType}
+            </if>
+        </where>
+    </select>
+
+    <select id="findByDeviceIds" resultType="com.fgnb.domain.Device">
+        select * from device where deviceId in
+        <foreach collection="list" item="deviceId" open="(" close=")" separator=",">
+            #{deviceId}
+        </foreach>
+    </select>
+</mapper>

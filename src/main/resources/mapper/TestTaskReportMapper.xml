@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fgnb.mapper.TestTaskReportMapper">
+
+
+    <insert id="addTestTaskReport" useGeneratedKeys="true" keyProperty="testTaskReportId">
+        insert into test_task_report
+        (testTaskId)
+        values
+        (#{testTaskId})
+    </insert>
+
+    <resultMap id="report" type="com.fgnb.vo.TestTaskReportVo">
+        <result column="projectName" property="projectName"/>
+        <result column="projectType" property="projectType"/>
+        <result column="testTaskName" property="testTaskName"/>
+        <result column="nickname" property="creatorName"/>
+        <result column="report_startTime" property="startTime"/>
+        <result column="report_endTime" property="endTime"/>
+        <result column="passCount" property="passCount"/>
+        <result column="failCount" property="failCount"/>
+        <result column="skipCount" property="skipCount"/>
+        <collection property="deviceReportInfos" ofType="com.fgnb.vo.TestTaskReportVo$DeviceReportInfo">
+            <result column="deviceId" property="deviceId"/>
+            <collection property="deviceTestCaseInfos" ofType="com.fgnb.vo.TestTaskReportVo$DeviceTestCaseInfo">
+                <result column="testCaseId" property="testCaseId"/>
+                <result column="testCaseName" property="testCaseName"/>
+                <result column="record_startTime" property="startTime"/>
+                <result column="record_endTime" property="endTime"/>
+                <result column="imgUrl" property="imgUrl"/>
+                <result column="errorInfo" property="errorInfo"/>
+                <result column="videoUrl" property="videoUrl"/>
+                <result column="record_status" property="status"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="getReport" resultMap="report">
+        SELECT
+        p.projectName,
+        p.projectType,
+        t.testTaskName,
+        u.nickname,
+        t.startTime report_startTime,
+        t.endTime report_endTime,
+        r.passCount,
+        r.failCount,
+        r.skipCount,
+        re.deviceId,
+        re.testCaseId,
+        re.testCaseName,
+        re.startTime record_startTime,
+        re.endTime record_endTime,
+        re.imgUrl,
+        re.errorInfo,
+        re.videoUrl,
+        re.`status` record_status
+        FROM
+            test_task_report r
+        LEFT JOIN test_task t ON r.testTaskId = t.testTaskId
+        LEFT JOIN user u on t.creatorUid = u.userId
+        LEFT JOIN project p ON t.projectId = p.projectId
+        LEFT JOIN test_task_report_test_case_record re ON re.testTaskReportId = r.testTaskReportId
+        where r.testTaskId = #{testTaskId}
+    </select>
+</mapper>

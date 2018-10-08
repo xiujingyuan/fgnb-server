@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fgnb.mapper.TestPlanMapper">
+
+    <insert id="addTestPlan" useGeneratedKeys="true" keyProperty="testPlanId">
+        insert into test_plan
+        (testPlanName,description,projectId,creatorUid,createTime)
+        values
+        (#{testPlanName},#{description},#{projectId},#{creatorUid},#{createTime})
+    </insert>
+
+    <select id="findTestPlansByProjectId" resultType="com.fgnb.domain.TestPlan">
+        select *,u1.nickname creatorNickname,u2.nickname updatorNickname from test_plan p
+        LEFT JOIN user u1 on p.creatorUid = u1.userId
+        LEFT JOIN user u2 on p.updatorUid = u2.userId
+        where projectId = #{projectId}
+        ORDER BY p.createTime desc
+    </select>
+
+    <resultMap id="TestPlanDetail" type="com.fgnb.dto.TestPlanDTO">
+        <id column="testPlanId" property="testPlanId"/>
+        <result column="projectId" property="projectId"/>
+        <result column="testPlanName" property="testPlanName"/>
+        <result column="description" property="description"/>
+        <result column="creatorUid" property="creatorUid"/>
+        <result column="createTime" property="createTime"/>
+        <result column="updatorUid" property="updatorUid"/>
+        <result column="updateTime" property="updateTime"/>
+        <collection property="testPlanBeforeList" ofType="com.fgnb.domain.TestPlanBefore">
+            <id column="testPlanBeforeId" property="testPlanBeforeId"/>
+            <result column="actionId" property="actionId"/>
+            <result column="actionName" property="actionName"/>
+            <result column="type" property="type"/>
+        </collection>
+        <collection property="testPlanTestSuites" ofType="com.fgnb.domain.TestPlanTestSuite">
+            <result column="testSuiteId" property="testSuiteId"/>
+            <result column="testSuiteName" property="testSuiteName"/>
+        </collection>
+
+    </resultMap>
+    <select id="findTestPlanDetailInfoByTestPlanId" resultMap="TestPlanDetail">
+        SELECT
+            p.testPlanId,p.projectId,p.testPlanName,p.description,p.creatorUid,p.createTime,p.updatorUid,p.updateTime,
+            s.testSuiteId,
+            b.testPlanBeforeId,b.actionId,b.type,
+            ts.testSuiteName,
+            a.actionName
+        FROM
+            test_plan p
+        LEFT JOIN test_plan_before b ON p.testPlanId = b.testPlanId
+        LEFT JOIN test_plan_test_suite s on p.testPlanId = s.testPlanId
+        LEFT JOIN test_suite ts on s.testSuiteId = ts.testSuiteId
+        LEFT JOIN action a on b.actionId = a.actionId
+        where p.testPlanId = #{testPlanId}
+    </select>
+    <update id="update">
+        update test_plan
+        <set>
+            <if test="testPlanName != null and testPlanName != ''">
+                testPlanName = #{testPlanName},
+            </if>
+            <if test="description!=null">
+                description = #{description},
+            </if>
+            <if test="updatorUid != null">
+                updatorUid = #{updatorUid},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime}
+            </if>
+        </set>
+        where testPlanId = #{testPlanId}
+    </update>
+
+    <resultMap id="TestPlanInfoVo" type="com.fgnb.vo.testplan.TestPlanInfoVo">
+        <result column="testPlanId" property="testPlanId"/>
+        <result column="testPlanName" property="testPlanName"/>
+        <result column="description" property="description"/>
+        <collection property="testPlanBeforeList" ofType="com.fgnb.domain.TestPlanBefore">
+            <result column="actionId" property="actionId"/>
+            <result column="actionName" property="actionName"/>
+            <result column="type" property="type"/>
+        </collection>
+        <collection property="testCasesTreeData" ofType="com.fgnb.vo.testplan.Node">
+            <result column="testSuiteName" property="label"></result>
+            <collection property="children" ofType="com.fgnb.vo.testplan.Node">
+                <result column="testcase_actionName" property="label"></result>
+            </collection>
+        </collection>
+    </resultMap>
+    <select id="findTestPlanInfoVoByTestPlanId" resultMap="TestPlanInfoVo">
+        select p.testPlanId,p.testPlanName,p.description,ts.testSuiteName,a.actionName testcase_actionName,a2.actionId,a2.actionName,b.type from test_plan p
+        left join test_plan_test_suite s on p.testPlanId = s.testPlanId
+        left join test_suite ts on s.testSuiteId = ts.testSuiteId
+        left join test_suite_test_case c on ts.testSuiteId = c.testSuiteId
+        left join action a on a.actionId = c.testCaseId
+        left join test_plan_before b on b.testPlanId = p.testPlanId
+        left join action a2 on b.actionId = a2.actionId
+        where p.testPlanId = #{testPlanId}
+    </select>
+
+    <select id="findTestCaseIdsByTestPlanId" resultType="java.lang.Integer">
+        select
+            a.actionId
+        FROM
+            test_plan p
+        LEFT JOIN test_plan_test_suite s ON p.testPlanId = s.testPlanId
+        LEFT JOIN test_suite ts ON s.testSuiteId = ts.testSuiteId
+        LEFT JOIN test_suite_test_case c ON ts.testSuiteId = c.testSuiteId
+        LEFT JOIN action a ON a.actionId = c.testCaseId
+        WHERE
+            p.testPlanId = #{testPlanId}
+    </select>
+</mapper>

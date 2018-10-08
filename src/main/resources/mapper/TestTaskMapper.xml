@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fgnb.mapper.TestTaskMapper">
+
+
+    <insert id="addTestTask" useGeneratedKeys="true" keyProperty="testTaskId">
+        insert into test_task
+        (projectId,testPlanId,testTaskName,description,runMode,status,creatorUid,startTime,endTime)
+        values
+        (#{projectId},#{testPlanId},#{testTaskName},#{description},#{runMode},#{status},#{creatorUid},#{startTime},#{endTime})
+    </insert>
+
+    <update id="updateTestTask">
+        update test_task
+        <set>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="endTime!=null">
+                endTime = #{endTime},
+            </if>
+        </set>
+        where testTaskId = #{testTaskId}
+    </update>
+
+    <select id="dynamicQuery" resultType="com.fgnb.domain.TestTask">
+        select t.*,u.nickname creatorName,p.testPlanName
+        from test_task t
+        left join test_plan p on t.testPlanId = p.testPlanId
+        left join user u on t.creatorUid = u.userId
+        <where>
+            <if test="projectId != null">
+                and t.projectId = #{projectId}
+            </if>
+            <if test="testPlanId != null">
+                and t.testPlanId = #{testPlanId}
+            </if>
+            <if test="testTaskName != null and testTaskName != ''">
+                and t.testTaskName = #{testTaskName}
+            </if>
+            <if test="description != null and description != ''">
+                and t.description = #{description}
+            </if>
+            <if test="runMode != null">
+                and t.runMode = #{runMode}
+            </if>
+            <if test="status != null">
+                and t.status = #{status}
+            </if>
+            <if test="creatorUid != null">
+                and t.creatorUid = #{creatorUid}
+            </if>
+            <if test="startTime != null">
+                and t.startTime <![CDATA[>=]]> #{startTime}
+            </if>
+            <if test="endTime != null">
+                and t.endTime <![CDATA[<=]]> #{endTime}
+            </if>
+        </where>
+        order by t.startTime desc
+    </select>
+</mapper>
