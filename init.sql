@@ -170,7 +170,7 @@ DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
 DROP TABLE IF EXISTS `global_var`;
 CREATE TABLE `global_var` (
 `globalVarId`  int(11) NOT NULL AUTO_INCREMENT ,
-`globalVarName`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`globalVarName`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `globalVarValue`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `description`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `projectId`  int(11) NOT NULL ,
@@ -178,7 +178,8 @@ CREATE TABLE `global_var` (
 `createTime`  datetime NOT NULL ,
 `updatorUid`  int(11) NULL DEFAULT NULL ,
 `updateTime`  datetime NULL DEFAULT NULL ,
-PRIMARY KEY (`globalVarId`)
+PRIMARY KEY (`globalVarId`),
+UNIQUE KEY `uniq_globalVarName_projectId` (`globalVarName`,`projectId`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
