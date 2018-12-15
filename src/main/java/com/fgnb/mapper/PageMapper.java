@@ -20,12 +20,6 @@ public interface PageMapper {
             "(#{pageName},#{projectId},#{categoryId},#{description},#{imgUrl},#{imgHeight},#{imgWidth},#{windowHierarchyJson},#{deviceId},#{creatorUid},#{createTime})")
     int addPage(Page page);
 
-    @Select("select * from page where pageName=#{pageName} and projectId=#{projectId}")
-    Page findPageByPageNameAndProjectId(Page page);
-
-    @Select("select * from page where pageName=#{pageName} and projectId=#{projectId} and pageId <> #{pageId}")
-    Page findPageByPageNameAndProjectIdAndIdIsNot(Page page);
-
     List<Page> findByPageCategory(Page page);
 
     @Delete("delete from page where pageId = #{pageId}")
