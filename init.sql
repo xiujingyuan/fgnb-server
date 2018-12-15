@@ -216,7 +216,7 @@ DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
 DROP TABLE IF EXISTS `project`;
 CREATE TABLE `project` (
 `projectId`  int(11) NOT NULL AUTO_INCREMENT ,
-`projectName`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`projectName`  varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `description`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `projectType`  int(11) NOT NULL ,
 `creatorUid`  int(11) NOT NULL ,
@@ -401,11 +401,12 @@ DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
 `userId`  int(11) NOT NULL AUTO_INCREMENT ,
-`username`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`username`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `password`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `nickname`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `createTime`  datetime NULL DEFAULT NULL ,
-PRIMARY KEY (`userId`)
+PRIMARY KEY (`userId`),
+UNIQUE KEY `uniq_username` (`username`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
