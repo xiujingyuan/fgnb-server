@@ -328,14 +328,15 @@ CREATE TABLE `test_task` (
 `testTaskId`  int(11) NOT NULL AUTO_INCREMENT ,
 `projectId`  int(11) NOT NULL ,
 `testPlanId`  int(11) NOT NULL ,
-`testTaskName`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`testTaskName`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `description`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `runMode`  int(11) NOT NULL ,
 `status`  int(11) NULL DEFAULT NULL ,
 `creatorUid`  int(11) NULL DEFAULT NULL ,
 `startTime`  datetime NULL DEFAULT NULL ,
 `endTime`  datetime NULL DEFAULT NULL ,
-PRIMARY KEY (`testTaskId`)
+PRIMARY KEY (`testTaskId`),
+UNIQUE KEY `uniq_projectId_testTaskName` (`projectId`,`testTaskName`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
