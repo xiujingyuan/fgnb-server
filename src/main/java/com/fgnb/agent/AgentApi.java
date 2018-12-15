@@ -1,4 +1,4 @@
-package com.fgnb.agentapi;
+package com.fgnb.agent;
 
 import com.alibaba.fastjson.JSONObject;
 import io.restassured.http.ContentType;
