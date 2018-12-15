@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     @ExceptionHandler(BusinessException.class)
     public Response handleBusinessException(BusinessException e){
-        log.error(e.getMessage(),e);
+        log.info(e.getMessage(),e);
         return Response.fail(e.getMessage());
     }
 
