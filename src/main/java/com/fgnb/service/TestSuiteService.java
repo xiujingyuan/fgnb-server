@@ -6,12 +6,14 @@ import com.fgnb.exception.BusinessException;
 import com.fgnb.mapper.TestSuiteMapper;
 import com.fgnb.mapper.TestSuiteTestCaseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.DuplicateFormatFlagsException;
 import java.util.List;
 
 /**
@@ -27,21 +29,19 @@ public class TestSuiteService extends BaseService{
 
     @Transactional
     public void addTestSuite(TestSuite testSuite) {
-        //校验重名
-        TestSuite dbTestSuite = testSuiteMapper.findByTestSuiteNameAndProjectId(testSuite);
-        if(dbTestSuite != null){
-            throw new BusinessException("命名冲突");
-        }
 
         testSuite.setCreateTime(new Date());
         testSuite.setCreatorUid(getUid());
 
         //TestSuite表
-        int row = testSuiteMapper.addTestSuite(testSuite);
-        if(row != 1){
-            throw new BusinessException("添加测试集失败");
+        try {
+            int row = testSuiteMapper.addTestSuite(testSuite);
+            if(row != 1){
+                throw new BusinessException("添加测试集失败");
+            }
+        }catch (DuplicateFormatFlagsException e){
+            throw new BusinessException("命名冲突");
         }
-
         //TestSuiteTestCase表
         addTestSuiteTestCaseData(testSuite);
     }
@@ -82,18 +82,19 @@ public class TestSuiteService extends BaseService{
 
     @Transactional
     public void updateTestSuite(TestSuite testSuite) {
-        //校验重名
-        TestSuite dbTestSuite = testSuiteMapper.findByTestSuiteNameAndProjectIdAndIdIsNot(testSuite);
-        if(dbTestSuite != null){
-            throw new BusinessException("命名冲突");
-        }
+
         //更新TestSuite表
         testSuite.setUpdateTime(new Date());
         testSuite.setUpdatorUid(getUid());
-        int row = testSuiteMapper.updateTestSuite(testSuite);
-        if(row != 1){
-            throw new BusinessException("更新testSuite失败");
+        try {
+            int row = testSuiteMapper.updateTestSuite(testSuite);
+            if(row != 1){
+                throw new BusinessException("更新testSuite失败");
+            }
+        }catch (DuplicateKeyException e){
+            throw new BusinessException("命名冲突");
         }
+
         //删除相关的测试用例
         testSuiteTestCaseMapper.deleteByTestSuiteId(testSuite.getTestSuiteId());
         //添加TestSuiteTestCase表

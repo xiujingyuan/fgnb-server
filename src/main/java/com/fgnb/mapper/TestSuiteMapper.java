@@ -12,11 +12,6 @@ import java.util.List;
  */
 @Mapper
 public interface TestSuiteMapper {
-    //校验重名
-    @Select("select * from test_suite where testSuiteName = #{testSuiteName} and projectId = #{projectId}")
-    TestSuite findByTestSuiteNameAndProjectId(TestSuite testSuite);
-    @Select("select * from test_suite where testSuiteName = #{testSuiteName} and projectId = #{projectId} and testSuiteId <> #{testSuiteId}")
-    TestSuite findByTestSuiteNameAndProjectIdAndIdIsNot(TestSuite testSuite);
 
     int addTestSuite(TestSuite testSuite);
 
