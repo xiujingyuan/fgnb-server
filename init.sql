@@ -240,13 +240,14 @@ DROP TABLE IF EXISTS `test_plan`;
 CREATE TABLE `test_plan` (
 `testPlanId`  int(11) NOT NULL AUTO_INCREMENT ,
 `projectId`  int(11) NOT NULL ,
-`testPlanName`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`testPlanName`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `description`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `creatorUid`  int(11) NULL DEFAULT NULL ,
 `createTime`  datetime NULL DEFAULT NULL ,
 `updatorUid`  int(11) NULL DEFAULT NULL ,
 `updateTime`  datetime NULL DEFAULT NULL ,
-PRIMARY KEY (`testPlanId`)
+PRIMARY KEY (`testPlanId`),
+UNIQUE KEY `uniq_projectId_testPlanName` (`projectId`,`testPlanName`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
