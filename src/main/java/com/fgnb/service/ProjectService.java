@@ -7,6 +7,7 @@ import com.fgnb.exception.BusinessException;
 import com.fgnb.mapper.ProjectMapper;
 import com.fgnb.vo.PageVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -27,19 +28,19 @@ public class ProjectService extends BaseService{
      * @return
      */
     public void add(Project project) {
-        //同一个项目类型 不允许存在相同的项目名
-        Project dbProject = projectMapper.findByProjectNameAndProjectType(project.getProjectName(), project.getProjectType());
-        if(dbProject != null){
-            throw new BusinessException("命名冲突");
-        }
 
         project.setCreateTime(new Date());
         project.setCreatorUid(getUid());
 
-        int row = projectMapper.addProject(project);
-        if(row!=1){
-            throw new BusinessException("新增失败");
+        try{
+            int row = projectMapper.addProject(project);
+            if(row!=1){
+                throw new BusinessException("添加失败，请稍后重试");
+            }
+        }catch (DuplicateKeyException e){
+            throw new BusinessException("命名冲突");
         }
+
     }
 
     //获取所有项目名
@@ -62,19 +63,18 @@ public class ProjectService extends BaseService{
 
     public void update(Project project) {
 
-        Project dbProject = projectMapper.findByProjectNameAndProjectTypeAndIdIsNot(project);
-        if(dbProject != null){
-            throw new BusinessException("命名冲突");
-        }
         project.setUpdateTime(new Date());
         project.setUpdatorUid(getUid());
-        int row = projectMapper.updateProject(project);
-        if(row!=1){
-            throw new BusinessException("修改失败");
+
+        try {
+            int row = projectMapper.updateProject(project);
+            if(row!=1){
+                throw new BusinessException("修改失败");
+            }
+        }catch (DuplicateKeyException e){
+            throw new BusinessException("命名冲突");
         }
+
     }
 
-    public List<Project> getProjectsByProjectType(Integer projectType) {
-        return projectMapper.getProjectsByProjectType(projectType);
-    }
 }

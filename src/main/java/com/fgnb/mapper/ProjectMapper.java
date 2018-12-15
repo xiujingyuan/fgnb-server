@@ -11,9 +11,6 @@ import java.util.List;
 @Mapper
 public interface ProjectMapper {
 
-    @Select("select * from project where projectName=#{projectName} and projectType=#{projectType}")
-    Project findByProjectNameAndProjectType(@Param("projectName") String projectName, @Param("projectType")Integer projectType);
-
     @Insert("insert into project" +
             "(projectName,description,projectType,createTime,creatorUid) " +
             "values" +
@@ -28,11 +25,6 @@ public interface ProjectMapper {
     @Delete("delete from project where projectId = #{projectId}")
     int delete(Integer projectId);
 
-    @Select("select * from project where projectName = #{projectName} and projectType=#{projectType} and projectId <> #{projectId}")
-    Project findByProjectNameAndProjectTypeAndIdIsNot(Project project);
-
     int updateProject(Project project);
 
-    @Select("select * from project where projectType=#{projectType} order by createTime desc")
-    List<Project> getProjectsByProjectType(Integer projectType);
 }
