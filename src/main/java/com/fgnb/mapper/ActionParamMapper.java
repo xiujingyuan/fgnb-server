@@ -17,7 +17,4 @@ public interface ActionParamMapper {
 
     @Select("select * from action_param where actionId = #{actionId}")
     List<ActionParam> findActionParamsByActionId(Integer actionId);
-
-    @Delete("delete from action_param where actionId = #{actionId}")
-    int deleteActionParamsByActionId(Integer actionId);
 }
