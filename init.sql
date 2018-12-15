@@ -126,7 +126,8 @@ CREATE TABLE `category` (
 `categoryType`  int(11) NOT NULL ,
 `projectId`  int(11) NOT NULL ,
 `createTime`  datetime NOT NULL ,
-PRIMARY KEY (`categoryId`)
+PRIMARY KEY (`categoryId`),
+UNIQUE KEY `uniq_categoryName_categoryType_projectId` (`categoryName`,`categoryType`,`projectId`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
