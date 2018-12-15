@@ -289,14 +289,15 @@ DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
 DROP TABLE IF EXISTS `test_suite`;
 CREATE TABLE `test_suite` (
 `testSuiteId`  int(11) NOT NULL AUTO_INCREMENT ,
-`testSuiteName`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`testSuiteName`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `description`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `projectId`  int(11) NOT NULL ,
 `creatorUid`  int(11) NULL DEFAULT NULL ,
 `createTime`  datetime NULL DEFAULT NULL ,
 `updatorUid`  int(11) NULL DEFAULT NULL ,
 `updateTime`  datetime NULL DEFAULT NULL ,
-PRIMARY KEY (`testSuiteId`)
+PRIMARY KEY (`testSuiteId`),
+UNIQUE KEY `uniq_testSuiteName_projectId` (`testSuiteName`,`projectId`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
