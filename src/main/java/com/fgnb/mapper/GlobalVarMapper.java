@@ -16,11 +16,6 @@ public interface GlobalVarMapper {
             "(#{globalVarName},#{globalVarValue},#{description},#{projectId},#{creatorUid},#{createTime})")
     int add(GlobalVar globalVar);
 
-    @Select("select * from global_var where globalVarName = #{globalVarName} and projectId = #{projectId}")
-    GlobalVar findByGlobalVarNameAndProjectId(GlobalVar globalVar);
-    @Select("select * from global_var where globalVarName = #{globalVarName} and projectId = #{projectId} and globalVarId <> #{globalVarId}")
-    GlobalVar findByGlobalVarNameAndProjectIdAndIdIsNot(GlobalVar globalVar);
-
     @Update("update global_var set " +
             "globalVarName = #{globalVarName}," +
             "globalVarValue = #{globalVarValue},"+
