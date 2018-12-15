@@ -223,7 +223,8 @@ CREATE TABLE `project` (
 `updatorUid`  int(11) NULL DEFAULT NULL ,
 `createTime`  datetime NOT NULL ,
 `updateTime`  datetime NULL DEFAULT NULL ,
-PRIMARY KEY (`projectId`)
+PRIMARY KEY (`projectId`),
+UNIQUE KEY `uniq_projectName_projectType` (`projectName`,`projectType`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
