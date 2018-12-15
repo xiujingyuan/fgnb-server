@@ -190,7 +190,7 @@ DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
 DROP TABLE IF EXISTS `page`;
 CREATE TABLE `page` (
 `pageId`  int(11) NOT NULL AUTO_INCREMENT ,
-`pageName`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`pageName`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `projectId`  int(11) NOT NULL ,
 `categoryId`  int(11) NOT NULL ,
 `description`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
@@ -203,7 +203,8 @@ CREATE TABLE `page` (
 `createTime`  datetime NOT NULL ,
 `updatorUid`  int(11) NULL DEFAULT NULL ,
 `updateTime`  datetime NULL DEFAULT NULL ,
-PRIMARY KEY (`pageId`)
+PRIMARY KEY (`pageId`),
+UNIQUE KEY `uniq_pageName_projectId` (`pageName`,`projectId`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
