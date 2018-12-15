@@ -11,6 +11,7 @@ import com.fgnb.mapper.TestPlanMapper;
 import com.fgnb.mapper.TestPlanTestSuiteMapper;
 import com.fgnb.vo.testplan.TestPlanInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -34,19 +35,20 @@ public class TestPlanService extends BaseService{
 
     @Transactional
     public void addTestPlan(TestPlan testPlan) {
-        //校验重名
-        TestPlan dbTestPlan = testPlanMapper.findByTestPlanNameAndProjectId(testPlan);
-        if(dbTestPlan!=null){
-            throw new BusinessException("命名冲突");
-        }
+
         //TestPlan表
         testPlan.setCreateTime(new Date());
         testPlan.setCreatorUid(getUid());
 
-        int row = testPlanMapper.addTestPlan(testPlan);
-        if(row != 1){
-            throw new BusinessException("保存testplan失败");
+        try{
+            int row = testPlanMapper.addTestPlan(testPlan);
+            if(row != 1){
+                throw new BusinessException("保存testplan失败");
+            }
+        }catch (DuplicateKeyException e){
+            throw new BusinessException("命名冲突");
         }
+
         //插入TestPlanTestSuite表 TestPlanBefore表
         handleBeforeAndSuiteData(testPlan);
     }
@@ -150,18 +152,18 @@ public class TestPlanService extends BaseService{
         if(testPlan.getTestPlanId() == null){
             throw new BusinessException("测试计划不能为空");
         }
-        //校验重名
-        TestPlan dbTestPlan = testPlanMapper.findByTestPlanNameAndProjectIdAndIdIsNot(testPlan);
-        if(dbTestPlan!=null){
-            throw new BusinessException("命名冲突");
-        }
 
         //保存TestPlan表数据
         testPlan.setUpdateTime(new Date());
         testPlan.setUpdatorUid(getUid());
-        int row = testPlanMapper.update(testPlan);
-        if(row != 1){
-            throw new BusinessException("更新TestPlan失败");
+
+        try {
+            int row = testPlanMapper.update(testPlan);
+            if(row != 1){
+                throw new BusinessException("更新TestPlan失败");
+            }
+        }catch (DuplicateKeyException e){
+            throw new BusinessException("命名冲突");
         }
 
         //删除TestPlanBefore数据

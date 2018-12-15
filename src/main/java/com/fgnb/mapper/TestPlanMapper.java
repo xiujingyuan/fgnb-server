@@ -15,8 +15,6 @@ import java.util.List;
  */
 @Mapper
 public interface TestPlanMapper {
-    @Select("select * from test_plan where testPlanName = #{testPlanName} and projectId = #{projectId}")
-    TestPlan findByTestPlanNameAndProjectId(TestPlan testPlan);
 
     int addTestPlan(TestPlan testPlan);
 
@@ -26,9 +24,6 @@ public interface TestPlanMapper {
     int deleteTestPlan(Integer testPlanId);
 
     TestPlanDTO findTestPlanDetailInfoByTestPlanId(Integer testPlanId);
-
-    @Select("select * from test_plan where testPlanName = #{testPlanName} and projectId = #{projectId} and testPlanId <> #{testPlanId}")
-    TestPlan findByTestPlanNameAndProjectIdAndIdIsNot(@Valid TestPlan testPlan);
 
     int update(@Valid TestPlan testPlan);
 
