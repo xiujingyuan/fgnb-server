@@ -14,7 +14,7 @@ SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `action`;
 CREATE TABLE `action` (
 `actionId`  int(11) NOT NULL AUTO_INCREMENT ,
-`actionName`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
+`actionName`  varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL ,
 `description`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `projectId`  int(11) NULL DEFAULT NULL ,
 `pageId`  int(11) NULL DEFAULT NULL ,
@@ -26,7 +26,8 @@ CREATE TABLE `action` (
 `updatorUid`  int(11) NULL DEFAULT NULL ,
 `updateTime`  datetime NULL DEFAULT NULL ,
 `categoryId`  int(11) NULL DEFAULT NULL ,
-PRIMARY KEY (`actionId`)
+PRIMARY KEY (`actionId`),
+UNIQUE KEY `uniq_actionName_projectId_actionType` (`actionName`,`projectId`,`actionType`) USING BTREE
 )
 ENGINE=InnoDB
 DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
