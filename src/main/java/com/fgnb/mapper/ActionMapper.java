@@ -17,12 +17,6 @@ public interface ActionMapper {
 
     int addAction(Action action);
 
-    @Select("select * from action where actionName = #{actionName} and actionType = #{actionType} and (projectId = #{projectId} or projectId is null)")
-    Action findByActionNameAndActionTypeAndProjectIdOrProjectIdIsNull(Action action);
-
-    @Select("select * from action where actionName = #{actionName} and actionType = #{actionType} and (projectId = #{projectId} or projectId is null) and actionId <> #{actionId}")
-    Action findByActionNameAndActionTypeAndProjectIdOrProjectIdIsNullAndActionIdIsNot(Action action);
-
     //基础的action与pageAction
     @Select("select * from action where (projectId = #{projectId} and actionType = 2) or projectId is null order by createTime desc")
     List<Action> findSelectableActions(Integer projectId);

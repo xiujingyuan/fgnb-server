@@ -39,7 +39,7 @@ public class TestSuiteService extends BaseService{
             if(row != 1){
                 throw new BusinessException("添加测试集失败");
             }
-        }catch (DuplicateFormatFlagsException e){
+        }catch (DuplicateKeyException e){
             throw new BusinessException("命名冲突");
         }
         //TestSuiteTestCase表

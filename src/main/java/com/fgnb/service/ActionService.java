@@ -13,6 +13,7 @@ import com.fgnb.vo.PageVo;
 import io.restassured.response.Response;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -49,18 +50,19 @@ public class ActionService extends BaseService{
 
     @Transactional
     public void addAction(Action action) {
-        //1.action表
-        //projectId为空代表是所有项目共享的action，也不能和共享的action重名
-        Action dbAction = actionMapper.findByActionNameAndActionTypeAndProjectIdOrProjectIdIsNull(action);
-        if(dbAction!=null){
-            throw new BusinessException("命名冲突");
-        }
+
         action.setCreatorUid(getUid());
         action.setCreateTime(new Date());
-        int actionRow = actionMapper.addAction(action);
-        if(actionRow != 1){
-            throw new BusinessException("添加action失败");
+
+        try{
+            int actionRow = actionMapper.addAction(action);
+            if(actionRow != 1){
+                throw new BusinessException("添加action失败");
+            }
+        }catch (DuplicateKeyException e){
+            throw new BusinessException("命名冲突");
         }
+
         //插入actionParam、ActionVar，actionStep，actionStepParamValue数据
         handleActionRelatedData(action);
     }
@@ -155,18 +157,20 @@ public class ActionService extends BaseService{
         if(action.getActionId()==null){
             throw new BusinessException("actionId不能为空");
         }
-        //校验重名问题
-        Action dbAction = actionMapper.findByActionNameAndActionTypeAndProjectIdOrProjectIdIsNullAndActionIdIsNot(action);
-        if(dbAction!=null){
-            throw new BusinessException("命名冲突");
-        }
+
         action.setUpdatorUid(getUid());
         action.setUpdateTime(new Date());
-        //1.修改action表
-        int row = actionMapper.updateAction(action);
-        if(row!=1){
-            throw new BusinessException("更新action失败");
+
+        try{
+            //1.修改action表
+            int row = actionMapper.updateAction(action);
+            if(row!=1){
+                throw new BusinessException("更新action失败");
+            }
+        }catch (DuplicateKeyException e){
+            throw new BusinessException("命名冲突");
         }
+
         //2.删除ActionParam
         //fixbug:当删除action参数时，会导致引用该action的步骤，无法获取到Action参数值那一列相关的参数名和参数描述
         //actionParamMapper.deleteActionParamsByActionId(action.getActionId());
