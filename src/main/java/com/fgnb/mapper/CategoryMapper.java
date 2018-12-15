@@ -19,12 +19,4 @@ public interface CategoryMapper {
     @Select("select * from category where projectId = #{projectId} and categoryType = #{categoryType} order by createTime desc")
     List<Category> queryCategoryList(@Param("projectId") Integer projectId,@Param("categoryType") Integer categoryType);
 
-    @Delete("delete from category where categoryId = #{categoryId}")
-    int deleteCategory(Integer categoryId);
-
-    int updateCategory(Category category);
-
-    @Select("select * from category where categoryName = #{categoryName} and projectId = #{projectId} and categoryType = #{categoryType}")
-    Category findByCategoryNameProjectIdAndCategoryType(@Param("categoryName") String categoryName,@Param("projectId") Integer projectId,@Param("categoryType") Integer categoryType);
-
 }

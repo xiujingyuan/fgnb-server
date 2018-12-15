@@ -31,18 +31,5 @@ public class CategoryController {
         return Response.success(categoryService.queryCategoryList(projectId,categoryType));
     }
 
-    @GetMapping("/delete")
-    public Response deleteCategory(Integer categoryId){
-        if(categoryId == null){
-            return Response.fail("categoryId不能为空");
-        }
-        categoryService.deleteCategory(categoryId);
-        return Response.success("删除成功");
-    }
 
-    @PostMapping("/update")
-    public Response updateCategory(@RequestBody @Validated Category category){
-        categoryService.updateCategory(category);
-        return Response.success("更新成功");
-    }
 }
