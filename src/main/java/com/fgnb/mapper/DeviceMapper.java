@@ -14,6 +14,9 @@ public interface DeviceMapper {
     @Select("select * from device where deviceId = #{deviceId}")
     Device findById(String deviceId);
 
+    @Select("select * from device where agentIp = #{agentIp} and status != 0")
+    List<Device> findNotOfflineDevicesByAgentIp(String agentIp);
+
     @Insert("insert into device " +
             "(" +
             "deviceId,deviceName,phoneIp,agentIp,systemVersion,apiLevel," +
