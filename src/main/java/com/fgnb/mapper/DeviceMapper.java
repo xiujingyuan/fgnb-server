@@ -11,6 +11,9 @@ import java.util.List;
 @Mapper
 public interface DeviceMapper {
 
+    @Update("update device set status = #{deviceStatus} where agentIp = #{agentIp}")
+    int updateDeviceStatusByAgentIp(@Param("deviceStatus") Integer deviceStatus,@Param("agentIp") String agentIp);
+
     @Select("select * from device where deviceId = #{deviceId}")
     Device findById(String deviceId);
 

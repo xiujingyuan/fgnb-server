@@ -1,5 +1,7 @@
 package com.fgnb.agent;
 
+import com.fgnb.enums.DeviceStatus;
+import com.fgnb.mapper.DeviceMapper;
 import de.codecentric.boot.admin.server.domain.entities.Instance;
 import de.codecentric.boot.admin.server.domain.entities.InstanceRepository;
 import de.codecentric.boot.admin.server.domain.events.InstanceEvent;
@@ -7,6 +9,7 @@ import de.codecentric.boot.admin.server.domain.events.InstanceStatusChangedEvent
 import de.codecentric.boot.admin.server.domain.values.StatusInfo;
 import de.codecentric.boot.admin.server.notify.AbstractStatusChangeNotifier;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
@@ -16,6 +19,10 @@ import reactor.core.publisher.Mono;
 @Component
 @Slf4j
 public class AgentStatusChangeNotifier extends AbstractStatusChangeNotifier {
+
+    @Autowired
+    private DeviceMapper deviceMapper;
+
     public AgentStatusChangeNotifier(InstanceRepository repositpry) {
         super(repositpry);
     }
@@ -28,7 +35,8 @@ public class AgentStatusChangeNotifier extends AbstractStatusChangeNotifier {
                 if(!StatusInfo.STATUS_UP.equals(status)){
                     //非上线
                     String agentURL = instance.getRegistration().getServiceUrl();//http://xx.xx.xx.xx:xxx/
-                    //todo 将该agent上的所有手机 下线
+                    String agentIp = agentURL.split("//")[1].split(":")[0];
+                    deviceMapper.updateDeviceStatusByAgentIp(DeviceStatus.OFFLINE.getStatus(),agentIp);
                 }
             }
         });
