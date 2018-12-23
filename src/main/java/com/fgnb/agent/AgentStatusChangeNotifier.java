@@ -35,6 +35,7 @@ public class AgentStatusChangeNotifier extends AbstractStatusChangeNotifier {
                 if(!StatusInfo.STATUS_UP.equals(status)){
                     //非上线
                     String agentURL = instance.getRegistration().getServiceUrl();//http://xx.xx.xx.xx:xxx/
+                    log.info("检测到agent {} 处于非在线状态",agentURL);
                     String agentIp = agentURL.split("//")[1].split(":")[0];
                     deviceMapper.updateDeviceStatusByAgentIp(DeviceStatus.OFFLINE.getStatus(),agentIp);
                 }
