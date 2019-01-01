@@ -51,9 +51,9 @@ public class AgentController {
                     //deviceType 1:chrome
                     JSONObject resp = JSON.parseObject(agentApi.getWebDriverPort(host[0], 1).asString());
                     if("1".equals(resp.getString("status"))){
-                        int intValue = resp.getJSONObject("data").getIntValue("port");
-                        if(intValue > 0){
-                            agentVo.setChromeDriverPort(intValue);
+                        int chromeDriverPort = resp.getJSONObject("data").getIntValue("port");
+                        if(chromeDriverPort > 0){
+                            agentVo.setChromeDriverPort(chromeDriverPort);
                         }
                     }
                 }catch (Exception e){
