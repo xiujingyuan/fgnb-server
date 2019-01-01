@@ -60,4 +60,14 @@ public class AgentApi {
         jsonObject.put("codes",codes);
         return given().contentType(ContentType.JSON).body(jsonObject).post("http://"+agentIp+":10002/task/commit");
     }
+
+    /**
+     * 获取webdriver端口
+     * @param agentIp
+     * @param driverType
+     * @return
+     */
+    public Response getWebDriverPort(String agentIp,Integer driverType){
+        return get("http://"+agentIp+":10002/selenium/getPort?driverType="+driverType);
+    }
 }

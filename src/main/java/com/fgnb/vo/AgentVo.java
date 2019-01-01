@@ -12,5 +12,6 @@ import java.util.List;
 public class AgentVo {
     private String agentIp;
     private String agentPort;
+    private Integer chromeDriverPort;
     private List<Device> devices;
 }
