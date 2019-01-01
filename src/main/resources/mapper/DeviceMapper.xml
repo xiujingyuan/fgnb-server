@@ -6,34 +6,34 @@
     <update id="update">
       UPDATE device
       <set>
-        <if test="deviceName != null and deviceName!= ''">
+        <if test="deviceName != null">
             deviceName = #{deviceName},
         </if>
-        <if test="phoneIp != null and phoneIp != ''">
+        <if test="phoneIp != null">
             phoneIp = #{phoneIp},
         </if>
-        <if test="agentIp!=null and agentIp!= ''">
+        <if test="agentIp!=null">
             agentIp = #{agentIp},
         </if>
-        <if test="systemVersion!=null and systemVersion!=''">
+        <if test="systemVersion!=null">
             systemVersion = #{systemVersion},
         </if>
-        <if test="apiLevel!=null and apiLevel!=''">
+        <if test="apiLevel!=null">
             apiLevel = #{apiLevel},
         </if>
-        <if test="cpuAbi!=null and cpuAbi!=''">
+        <if test="cpuAbi!=null">
             cpuAbi = #{cpuAbi},
         </if>
-        <if test="cpuInfo!=null and cpuInfo!=''">
+        <if test="cpuInfo!=null">
             cpuInfo = #{cpuInfo},
         </if>
-        <if test="memSize!=null and memSize!=''">
+        <if test="memSize!=null">
             memSize = #{memSize},
         </if>
-        <if test="resolution!=null and resolution!=''">
+        <if test="resolution!=null">
             resolution = #{resolution},
         </if>
-        <if test="imgUrl!=null and imgUrl!=''">
+        <if test="imgUrl!=null">
             imgUrl = #{imgUrl},
         </if>
         <if test="deviceType!=null">
@@ -54,7 +54,7 @@
         <if test="lastOfflineTime!=null">
             lastOfflineTime = #{lastOfflineTime},
         </if>
-        <if test="userName!=null and userName!=''">
+        <if test="userName!=null">
             userName = #{userName},
         </if>
         <if test="createTime!=null">

@@ -18,13 +18,13 @@
             <if test="endTime != null">
                 endTime = #{endTime},
             </if>
-            <if test="imgUrl != null and imgUrl != ''">
+            <if test="imgUrl != null">
                 imgUrl = #{imgUrl},
             </if>
-            <if test="errorInfo != null and errorInfo != ''">
+            <if test="errorInfo != null">
                 errorInfo = #{errorInfo},
             </if>
-            <if test="videoUrl != null and videoUrl != ''">
+            <if test="videoUrl != null">
                 videoUrl = #{videoUrl},
             </if>
             <if test="status != null">

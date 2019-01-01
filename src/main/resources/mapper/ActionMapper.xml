@@ -26,7 +26,7 @@
     <update id="updateAction">
         update action
         <set>
-            <if test="actionName != null and actionName!=''">
+            <if test="actionName != null">
                 actionName = #{actionName},
             </if>
             <if test="description != null">
@@ -35,7 +35,7 @@
             <if test="categoryId != null">
                 categoryId = #{categoryId},
             </if>
-            <if test="returnValue != null and returnValue!=''">
+            <if test="returnValue != null">
                 returnValue = #{returnValue},
             </if>
             <if test="updatorUid != null">

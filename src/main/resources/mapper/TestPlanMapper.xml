@@ -58,7 +58,7 @@
     <update id="update">
         update test_plan
         <set>
-            <if test="testPlanName != null and testPlanName != ''">
+            <if test="testPlanName != null">
                 testPlanName = #{testPlanName},
             </if>
             <if test="description!=null">

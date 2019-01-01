@@ -42,7 +42,7 @@
     <update id="updateTestSuite">
         update test_suite
         <set>
-            <if test="testSuiteName != null and testSuiteName != ''">
+            <if test="testSuiteName != null">
                 testSuiteName = #{testSuiteName},
             </if>
             <if test="description != null">

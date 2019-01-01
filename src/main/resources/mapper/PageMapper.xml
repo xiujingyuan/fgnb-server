@@ -22,13 +22,13 @@
     <update id="updatePage">
         update page
         <set>
-            <if test="pageName !=null and pageName != ''">
+            <if test="pageName !=null">
                 pageName = #{pageName},
             </if>
             <if test="description !=null">
                 description = #{description},
             </if>
-            <if test="imgUrl !=null and imgUrl != ''">
+            <if test="imgUrl !=null">
                 imgUrl = #{imgUrl},
             </if>
             <if test="imgHeight !=null">
@@ -37,10 +37,10 @@
             <if test="imgWidth !=null">
                 imgWidth = #{imgWidth},
             </if>
-            <if test="windowHierarchyJson !=null and windowHierarchyJson != ''">
+            <if test="windowHierarchyJson !=null">
                 windowHierarchyJson = #{windowHierarchyJson},
             </if>
-            <if test="deviceId !=null and deviceId != ''">
+            <if test="deviceId !=null">
                 deviceId = #{deviceId},
             </if>
             <if test="updateTime !=null">
