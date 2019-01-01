@@ -7,7 +7,8 @@ package com.fgnb.enums;
 public enum ProjectType {
 
     ANDROID("Android",1),
-    IOS("iOS",2);
+    IOS("iOS",2),
+    WEB("Web",3);
 
     private int type;
     private String name;
