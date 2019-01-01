@@ -20,13 +20,9 @@ public class Page extends BaseDomain{
     private Integer categoryId;
     private String description;
 
-    @NotBlank(message = "图片地址不能为空")
     private String imgUrl;
-    @NotNull(message = "图片高度不能为空")
     private Integer imgHeight;
-    @NotNull(message = "图片宽度不能为空")
     private Integer imgWidth;
-    @NotBlank(message = "布局json不能为空")
     private String windowHierarchyJson;
     private String deviceId;
 }
