@@ -1,5 +1,6 @@
 package com.fgnb.service;
 
+import com.fgnb.enums.ProjectType;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.fgnb.agent.AgentApi;
@@ -47,6 +48,9 @@ public class ActionService extends BaseService{
 
     @Autowired
     private AgentApi agentApi;
+
+    @Autowired
+    private ProjectMapper projectMapper;
 
     @Transactional
     public void addAction(Action action) {
@@ -186,21 +190,38 @@ public class ActionService extends BaseService{
         return actionMapper.getActionDetailInfoByActionId(actionId);
     }
 
+    /**
+     * modi 2019-01-03 增加web支持
+     * @param actionDTO
+     */
     public void debug(ActionDTO actionDTO) {
-        if(StringUtils.isEmpty(actionDTO.getAgentIp()) ||
-                StringUtils.isEmpty(actionDTO.getDeviceId()) ||
-                StringUtils.isEmpty(actionDTO.getUiautomatorServerPort())){
-            throw new BusinessException("请选择一台手机远程使用");
+
+        if(StringUtils.isEmpty(actionDTO.getAgentIp()) || StringUtils.isEmpty(actionDTO.getPort())){
+            throw new BusinessException("agentIp或端口不能为空");
         }
-        //检查设备是否可调试action
-        try{
-            Response response = agentApi.checkDeviceCanDebugAction(actionDTO.getAgentIp(), actionDTO.getUiautomatorServerPort());
-            if(!"1".equals(response.path("status"))){
-                throw new BusinessException(response.path("msg"));
+
+        //是否是移动端
+        boolean isMobile = true;
+        Project project = projectMapper.findById(actionDTO.getProjectId());
+        if(project.getProjectType() == ProjectType.WEB.getType()){
+            isMobile = false;
+        }
+
+        if(isMobile){
+            //移动端
+            if(StringUtils.isEmpty(actionDTO.getDeviceId())){
+                throw new BusinessException("请选择一台手机远程使用");
             }
-            log.info("检查设备是否可调试action -> {}",response.asString());
-        }catch (Exception e){
-            throw new BusinessException(e.getMessage(),e);
+            //检查设备是否可调试action
+            try{
+                Response response = agentApi.checkDeviceCanDebugAction(actionDTO.getAgentIp(), actionDTO.getPort());
+                if(!"1".equals(response.path("status"))){
+                    throw new BusinessException(response.path("msg"));
+                }
+                log.info("检查设备是否可调试action -> {}",response.asString());
+            }catch (Exception e){
+                throw new BusinessException(e.getMessage(),e);
+            }
         }
 
         //这个地方因为可能修改过最上层action的相关信息 所以不直接通过actionId buildActionTree
@@ -218,15 +239,21 @@ public class ActionService extends BaseService{
 
         String testNGCode;
         String testClassName = "DebugClass_"+ UUIDUtil.getUUID();
+
         try{
             //将调试的action转换为testng代码
-            testNGCode = new TestNGCodeConverter().convertDebugAction(testClassName,actionDTO,"debugAction.ftl");
+            if(isMobile) {
+                //移动端
+                testNGCode = new TestNGCodeConverter().convertDebugAction(testClassName, actionDTO, "debugAction.ftl");
+            }else{
+                //web
+                testNGCode = new TestNGCodeConverter().convertDebugAction(testClassName,actionDTO,"debugWebAction.ftl");
+            }
         }catch (Exception e){
             throw new BusinessException("代码转换出错，格式错误",e);
         }
 
         log.info("uid:{},转换代码:{}",getUid(),testNGCode);
-
         //将代码发送到agent执行
         try{
             Response response = agentApi.debugAction(actionDTO.getAgentIp(), testClassName,testNGCode);
