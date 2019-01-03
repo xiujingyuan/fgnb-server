@@ -35,7 +35,7 @@ public class TestNGCodeConverter {
         dataModel.put("methods",methodList);
         dataModel.put("testClassName",testClassName);
         dataModel.put("deviceId",action.getDeviceId());
-        dataModel.put("port",action.getUiautomatorServerPort());
+        dataModel.put("port",action.getPort());
 
         dataModel.put("testTaskId",action.getTestTaskId());
         dataModel.put("testTaskReportId",action.getTestTaskReportId());

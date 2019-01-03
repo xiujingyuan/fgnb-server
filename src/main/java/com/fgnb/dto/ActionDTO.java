@@ -11,7 +11,7 @@ public class ActionDTO extends Action{
     //调试Action - start
     private String agentIp;
     private String deviceId;
-    private Integer uiautomatorServerPort;
+    private Integer port;
     //调试Action - end
 
     //生成测试用例 - start

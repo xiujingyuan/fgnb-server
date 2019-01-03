@@ -223,7 +223,7 @@ public class TestTaskService extends BaseService{
         BeanUtils.copyProperties(action,actionDTO);
         actionDTO.setAgentIp(deviceInfo.getAgentIp());
         actionDTO.setDeviceId(deviceInfo.getDeviceId());
-        actionDTO.setUiautomatorServerPort(deviceInfo.getPort());
+        actionDTO.setPort(deviceInfo.getPort());
         //添加全局变量
         List<GlobalVar> globalVars = globalVarService.findByProjectId(action.getProjectId());
         actionDTO.setGlobalVars(globalVars);
