@@ -493,6 +493,11 @@ INSERT INTO `action` VALUES ('11', '[Android]启动/重启APP', '启动/重启AP
 INSERT INTO `action_param` VALUES ('16', 'packageName', 'APP包名', '11');
 INSERT INTO `action_param` VALUES ('17', 'launchActivity', 'APP启动Activity名', '11');
 
+--web
+-- 打开网页
+INSERT INTO `action` VALUES ('12', '[web]打开网页', '打开网页', null, null, '1', 'com.fgnb.actions.web.OpenURL', null, null, '2018-09-19 00:00:11', null, null, null);
+INSERT INTO `action_param` VALUES ('18', 'url', '网页地址', '12');
+
 
 
 
