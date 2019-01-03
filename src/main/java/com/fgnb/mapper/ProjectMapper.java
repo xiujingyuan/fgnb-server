@@ -27,4 +27,7 @@ public interface ProjectMapper {
 
     int updateProject(Project project);
 
+    @Select("select * from project where projectId = #{projectId}")
+    Project findById(Integer projectId);
+
 }
