@@ -17,8 +17,19 @@ public interface ActionMapper {
 
     int addAction(Action action);
 
-    //基础的action与pageAction
-    @Select("select * from action where (projectId = #{projectId} and actionType = 2) or projectId is null order by createTime desc")
+    /*1.同一个项目下自定义action(actionType=2)
+      2.所有项目公用的基础action(projectId=null & actionType=1 & projectType=null )
+      3.同一项目类型的基础action(projectId=null & actionType=1 & projectType)*/
+    @Select("SELECT * FROM action " +
+            "WHERE " +
+            "(projectId = #{projectId} AND actionType = 2) " +
+            "OR" +
+            "(" +
+            "projectId IS NULL " +
+            "AND actionType = 1 " +
+            "AND ( projectType IS NULL OR projectType = ( SELECT projectType FROM project WHERE projectId = #{projectId} ) ) " +
+            ")" +
+            "ORDER BY createTime DESC")
     List<Action> findSelectableActions(Integer projectId);
 
     List<Action> findActionsByPageId(Integer pageId);

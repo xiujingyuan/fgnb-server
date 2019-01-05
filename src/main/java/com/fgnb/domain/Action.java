@@ -29,6 +29,9 @@ public class Action extends BaseDomain{
     //1.基础action  2.自己封装的action 3.testcase 4.testPlanBefore
     @NotNull(message = "actionType不能为空")
     private Integer actionType;
+
+    private Integer projectType;
+
     private String className;
 
     //返回值

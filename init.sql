@@ -19,6 +19,7 @@ CREATE TABLE `action` (
 `projectId`  int(11) NULL DEFAULT NULL ,
 `pageId`  int(11) NULL DEFAULT NULL ,
 `actionType`  int(11) NOT NULL ,
+`projectType`  int(11) NULL DEFAULT NULL ,
 `className`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `returnValue`  varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL ,
 `creatorUid`  int(11) NULL DEFAULT NULL ,
@@ -430,7 +431,7 @@ DEFAULT CHARACTER SET=utf8mb4 COLLATE=utf8mb4_general_ci
 INSERT INTO `user` VALUES ('1','admin','admin','admin','2018-09-19 00:00:00');
 
 -- 点击
-INSERT INTO `action` VALUES ('1', '点击', '点击元素', null, null, '1', 'com.fgnb.actions.macaca.Click', null, null, '2018-09-19 00:00:00', null, null, null);
+INSERT INTO `action` VALUES ('1', '点击', '点击元素', null, null, '1', '1', 'com.fgnb.actions.macaca.Click', null, null, '2018-09-19 00:00:00', null, null, null);
 INSERT INTO `action_param` VALUES ('1', 'findBy', '查找方式', '1');
 INSERT INTO `action_param` VALUES ('2', 'value', '查找值', '1');
 INSERT INTO `action_param_possible_value` VALUES ('1', 'xpath', 'xpath查找方式', '1');
@@ -440,7 +441,7 @@ INSERT INTO `action_param_possible_value` VALUES ('4', 'name', 'name查找方式
 
 
 -- 输入
-INSERT INTO `action` VALUES ('2', '输入', '输入内容', null, null, '1', 'com.fgnb.actions.macaca.SendKeys', null, null, '2018-09-19 00:00:01', null, null, null);
+INSERT INTO `action` VALUES ('2', '输入', '输入内容', null, null, '1', '1', 'com.fgnb.actions.macaca.SendKeys', null, null, '2018-09-19 00:00:01', null, null, null);
 INSERT INTO `action_param` VALUES ('3', 'findBy', '查找方式', '2');
 INSERT INTO `action_param` VALUES ('4', 'value', '查找值', '2');
 INSERT INTO `action_param` VALUES ('5', 'sendContent', '输入内容', '2');
@@ -450,7 +451,7 @@ INSERT INTO `action_param_possible_value` VALUES ('7', 'text_contains', 'text_co
 INSERT INTO `action_param_possible_value` VALUES ('8', 'name', 'name查找方式', '3');
 
 -- 等待元素出现
-INSERT INTO `action` VALUES ('3', '等待元素出现', '等待元素出现', null, null, '1', 'com.fgnb.actions.macaca.WaitForElement', null, null, '2018-09-19 00:00:02', null, null, null);
+INSERT INTO `action` VALUES ('3', '等待元素出现', '等待元素出现', null, null, '1', '1', 'com.fgnb.actions.macaca.WaitForElement', null, null, '2018-09-19 00:00:02', null, null, null);
 INSERT INTO `action_param` VALUES ('6', 'findBy', '查找方式', '3');
 INSERT INTO `action_param` VALUES ('7', 'value', '查找值', '3');
 INSERT INTO `action_param` VALUES ('8', 'timeout_second', '最大等待时间(秒)', '3');
@@ -461,41 +462,41 @@ INSERT INTO `action_param_possible_value` VALUES ('12', 'name', 'name查找方�
 
 
 -- 安卓点击返回按键
-INSERT INTO `action` VALUES ('4', '[Android]点击返回按键', '点击返回按键', null, null, '1', 'com.fgnb.actions.macaca.PressBack', null, null, '2018-09-19 00:00:03', null, null, null);
+INSERT INTO `action` VALUES ('4', '[Android]点击返回按键', '点击返回按键', null, null, '1', '1', 'com.fgnb.actions.macaca.PressBack', null, null, '2018-09-19 00:00:03', null, null, null);
 
 -- 安卓点击Home按键
-INSERT INTO `action` VALUES ('5', '[Android]点击Home按键', '点击Home按键', null, null, '1', 'com.fgnb.actions.macaca.PressHome', null, null, '2018-09-19 00:00:04', null, null, null);
+INSERT INTO `action` VALUES ('5', '[Android]点击Home按键', '点击Home按键', null, null, '1', '1', 'com.fgnb.actions.macaca.PressHome', null, null, '2018-09-19 00:00:04', null, null, null);
 
 -- 安卓检查toast
-INSERT INTO `action` VALUES ('6', '[Android]检查toast', '检查toast', null, null, '1', 'com.fgnb.actions.macaca.CheckToast', null, null, '2018-09-19 00:00:05', null, null, null);
+INSERT INTO `action` VALUES ('6', '[Android]检查toast', '检查toast', null, null, '1',  '1', 'com.fgnb.actions.macaca.CheckToast', null, null, '2018-09-19 00:00:05', null, null, null);
 INSERT INTO `action_param` VALUES ('9', 'toast', '显示的toast', '6');
 INSERT INTO `action_param` VALUES ('10', 'timeout_second', '最大等待时间(秒)', '6');
 
 -- 休眠
-INSERT INTO `action` VALUES ('7', '休眠', '休眠', null, null, '1', 'com.fgnb.actions.common.Sleep', null, null, '2018-09-19 00:00:06', null, null, null);
+INSERT INTO `action` VALUES ('7', '休眠', '休眠', null, null, '1', null, 'com.fgnb.actions.common.Sleep', null, null, '2018-09-19 00:00:06', null, null, null);
 INSERT INTO `action_param` VALUES ('11', 'ms', '休眠毫秒数', '7');
 
 -- Android清除APP数据
-INSERT INTO `action` VALUES ('8', '[Android]清除APP数据', '使用shell pm clear ${packageName} 清除数据 ', null, null, '1', 'com.fgnb.actions.android.ClearAppData', null, null, '2018-09-19 00:00:07', null, null, null);
+INSERT INTO `action` VALUES ('8', '[Android]清除APP数据', '使用shell pm clear ${packageName} 清除数据 ', null, null, '1', '1', 'com.fgnb.actions.android.ClearAppData', null, null, '2018-09-19 00:00:07', null, null, null);
 INSERT INTO `action_param` VALUES ('12', 'packageName', 'app包名', '8');
 
 -- Android执行adb shell命令
-INSERT INTO `action` VALUES ('9', '[Android]执行adb shell命令', '执行adb shell命令', null, null, '1', 'com.fgnb.actions.android.ExcuteAdbShell', null, null, '2018-09-19 00:00:08', null, null, null);
+INSERT INTO `action` VALUES ('9', '[Android]执行adb shell命令', '执行adb shell命令', null, null, '1', '1', 'com.fgnb.actions.android.ExcuteAdbShell', null, null, '2018-09-19 00:00:08', null, null, null);
 INSERT INTO `action_param` VALUES ('13', 'cmd', '命令', '9');
 
 -- Android安装APP
-INSERT INTO `action` VALUES ('10', '[Android]安装APP', '1.下载APP 2.卸载APP（如果安装了） 3.安装APP', null, null, '1', 'com.fgnb.actions.android.InstallApp', null, null, '2018-09-19 00:00:09', null, null, null);
+INSERT INTO `action` VALUES ('10', '[Android]安装APP', '1.下载APP 2.卸载APP（如果安装了） 3.安装APP', null, null, '1', '1', 'com.fgnb.actions.android.InstallApp', null, null, '2018-09-19 00:00:09', null, null, null);
 INSERT INTO `action_param` VALUES ('14', 'appDownloadURL', 'APP下载地址', '10');
 INSERT INTO `action_param` VALUES ('15', 'packageName', 'APP包名', '10');
 
 -- 启动/重启APP
-INSERT INTO `action` VALUES ('11', '[Android]启动/重启APP', '启动/重启APP', null, null, '1', 'com.fgnb.actions.android.LaunchApp', null, null, '2018-09-19 00:00:10', null, null, null);
+INSERT INTO `action` VALUES ('11', '[Android]启动/重启APP', '启动/重启APP', null, null, '1', '1', 'com.fgnb.actions.android.LaunchApp', null, null, '2018-09-19 00:00:10', null, null, null);
 INSERT INTO `action_param` VALUES ('16', 'packageName', 'APP包名', '11');
 INSERT INTO `action_param` VALUES ('17', 'launchActivity', 'APP启动Activity名', '11');
 
---web
+-- web
 -- 打开网页
-INSERT INTO `action` VALUES ('12', '[web]打开网页', '打开网页', null, null, '1', 'com.fgnb.actions.web.OpenURL', null, null, '2018-09-19 00:00:11', null, null, null);
+INSERT INTO `action` VALUES ('12', '[web]打开网页', '打开网页', null, null, '1', '3', 'com.fgnb.actions.web.OpenURL', null, null, '2018-09-19 00:00:11', null, null, null);
 INSERT INTO `action_param` VALUES ('18', 'url', '网页地址', '12');
 
 
