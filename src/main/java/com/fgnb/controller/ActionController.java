@@ -2,6 +2,7 @@ package com.fgnb.controller;
 
 import com.fgnb.domain.Action;
 import com.fgnb.dto.ActionDTO;
+import com.fgnb.enums.ActionType;
 import com.fgnb.service.ActionService;
 import com.fgnb.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class ActionController {
     @PostMapping("/add")
     public Response addAction(@RequestBody @Validated Action action){
         //测试用例 必须要有分类
-        if(action.getActionType() == 3){
+        if(action.getActionType() == ActionType.TESTCASE_ACTION.getType()){
             if(action.getCategoryId() == null){
                 return Response.fail("测试用例分类不能为空");
             }
