@@ -249,13 +249,12 @@ public class TestTaskService extends BaseService{
             int deviceIndex = 0;
             for(int i=0;i<testCaseIds.size();i++){
                 DeviceInfo deviceInfo = deviceUiAutomaorInfos.get(deviceIndex);
-                if(deviceActionMap.get(deviceInfo) == null){
-                    List<Integer> deviceIds = new ArrayList<>();
-                    deviceIds.add(testCaseIds.get(i));
-                    deviceActionMap.put(deviceInfo,deviceIds);
-                }else{
-                    deviceActionMap.get(deviceInfo).add(testCaseIds.get(i));
+                List<Integer> deviceCaseIds = deviceActionMap.get(deviceInfo);
+                if(deviceCaseIds == null){
+                    deviceCaseIds = new ArrayList<>();
+                    deviceActionMap.put(deviceInfo,deviceCaseIds);
                 }
+                deviceCaseIds.add(testCaseIds.get(i));
                 deviceIndex++;
                 //最后一个设备 重返第一个设备
                 if(deviceIndex == deviceUiAutomaorInfos.size()){
