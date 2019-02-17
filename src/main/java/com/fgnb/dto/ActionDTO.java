@@ -10,6 +10,7 @@ import lombok.Data;
 public class ActionDTO extends Action{
     //调试Action - start
     private String agentIp;
+    private Integer agentPort;
     private String deviceId;
     private Integer port;
     //调试Action - end

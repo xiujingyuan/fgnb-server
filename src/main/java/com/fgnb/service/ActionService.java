@@ -196,8 +196,8 @@ public class ActionService extends BaseService{
      */
     public void debug(ActionDTO actionDTO) {
 
-        if(StringUtils.isEmpty(actionDTO.getAgentIp()) || StringUtils.isEmpty(actionDTO.getPort())){
-            throw new BusinessException("agentIp或端口不能为空");
+        if(StringUtils.isEmpty(actionDTO.getAgentIp()) || actionDTO.getAgentPort() == null || StringUtils.isEmpty(actionDTO.getPort())){
+            throw new BusinessException("agentIp或agentport或调试端口不能为空");
         }
 
         //是否是移动端
@@ -214,7 +214,7 @@ public class ActionService extends BaseService{
             }
             //检查设备是否可调试action
             try{
-                Response response = agentApi.checkDeviceCanDebugAction(actionDTO.getAgentIp(), actionDTO.getPort());
+                Response response = agentApi.checkDeviceCanDebugAction(actionDTO.getAgentIp(),actionDTO.getAgentPort(), actionDTO.getPort());
                 if(!"1".equals(response.path("status"))){
                     throw new BusinessException(response.path("msg"));
                 }
@@ -256,7 +256,7 @@ public class ActionService extends BaseService{
         log.info("uid:{},转换代码:{}",getUid(),testNGCode);
         //将代码发送到agent执行
         try{
-            Response response = agentApi.debugAction(actionDTO.getAgentIp(), testClassName,testNGCode);
+            Response response = agentApi.debugAction(actionDTO.getAgentIp(),actionDTO.getAgentPort(), testClassName,testNGCode);
             if(!"1".equals(response.path("status"))){
                 throw new BusinessException(response.path("msg"));
             }

@@ -43,13 +43,15 @@ public class AgentController {
                 AgentVo agentVo = new AgentVo();
                 String url = instance.getRegistration().getServiceUrl();//http://xx.xx.xx.x:10002/
                 String[] host = url.split("//")[1].split(":");
-                agentVo.setAgentIp(host[0]);
-                agentVo.setAgentPort(host[1].substring(0,host[1].length()-1));
-                agentVo.setDevices(deviceMapper.findNotOfflineDevicesByAgentIp(host[0]));
+                String agentIp = host[0];
+                String agentPort = host[1].substring(0,host[1].length()-1);
+                agentVo.setAgentIp(agentIp);
+                agentVo.setAgentPort(agentPort);
+                agentVo.setDevices(deviceMapper.findNotOfflineDevicesByAgentIp(agentIp));
 
                 try {
                     //deviceType 1:chrome
-                    JSONObject resp = JSON.parseObject(agentApi.getWebDriverPort(host[0], 1).asString());
+                    JSONObject resp = JSON.parseObject(agentApi.getWebDriverPort(agentIp,agentPort, 1).asString());
                     if("1".equals(resp.getString("status"))){
                         int chromeDriverPort = resp.getJSONObject("data").getIntValue("port");
                         if(chromeDriverPort > 0){

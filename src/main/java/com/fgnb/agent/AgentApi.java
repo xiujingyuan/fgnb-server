@@ -21,8 +21,8 @@ public class AgentApi {
      * @param uiautomator2Port
      * @return
      */
-    public Response checkDeviceCanDebugAction(String agentIp,int uiautomator2Port){
-        return get("http://"+agentIp+":10002/debug/checkDeviceCanDebugAction?uiautomator2Port="+uiautomator2Port);
+    public Response checkDeviceCanDebugAction(String agentIp,int agentPort,int uiautomator2Port){
+        return get("http://" + agentIp + ":" + agentPort + "/debug/checkDeviceCanDebugAction?uiautomator2Port=" + uiautomator2Port);
     }
 
     /**
@@ -31,14 +31,14 @@ public class AgentApi {
      * @param code
      * @return
      */
-    public Response debugAction(String agentIp,String testClassName,String code){
+    public Response debugAction(String agentIp,int agentPort,String testClassName,String code){
         Map body = new HashMap();
         body.put("testNGCode",code);
         body.put("testClassName",testClassName);
         return given()
                 .contentType(ContentType.JSON)
                 .body(body)
-                .post("http://"+agentIp+":10002/debug/debugAction");
+                .post("http://" + agentIp + ":" + agentPort + "/debug/debugAction");
     }
 
     /**
@@ -46,19 +46,19 @@ public class AgentApi {
      * @param agentIp
      * @return
      */
-    public Response openUiAutomatorServer(String agentIp,String deviceId){
-        return get("http://"+agentIp+":10002/device/openUiAutomatorServer?deviceId="+deviceId);
+    public Response openUiAutomatorServer(String agentIp,int agentPort,String deviceId){
+        return get("http://" + agentIp + ":" + agentPort + "/device/openUiAutomatorServer?deviceId=" + deviceId);
     }
 
     /**
      * 提交测试任务
      * @return
      */
-    public Response commitTestTask(String agentIp,String deviceId,Map<String,String> codes){
+    public Response commitTestTask(String agentIp,int agentPort,String deviceId,Map<String,String> codes){
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("deviceId",deviceId);
         jsonObject.put("codes",codes);
-        return given().contentType(ContentType.JSON).body(jsonObject).post("http://"+agentIp+":10002/task/commit");
+        return given().contentType(ContentType.JSON).body(jsonObject).post("http://"+agentIp+":"+agentPort+"/task/commit");
     }
 
     /**
@@ -67,7 +67,7 @@ public class AgentApi {
      * @param driverType
      * @return
      */
-    public Response getWebDriverPort(String agentIp,Integer driverType){
-        return get("http://"+agentIp+":10002/selenium/getPort?driverType="+driverType);
+    public Response getWebDriverPort(String agentIp,String agentPort,Integer driverType){
+        return get("http://"+agentIp+":"+agentPort+"/selenium/getPort?driverType="+driverType);
     }
 }

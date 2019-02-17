@@ -198,7 +198,7 @@ public class TestTaskService extends BaseService{
         for(DeviceInfo deviceInfo:deviceCodes.keySet()){
             threadPool.execute(()->{
                 try{
-                    Response response = agentApi.commitTestTask(deviceInfo.getAgentIp(),deviceInfo.getDeviceId(),deviceCodes.get(deviceInfo));
+                    Response response = agentApi.commitTestTask(deviceInfo.getAgentIp(),deviceInfo.getAgentPort(),deviceInfo.getDeviceId(),deviceCodes.get(deviceInfo));
                     log.info("[{}]提交任务，agent返回 -> {}",deviceInfo.getDeviceId(),response.asString());
                     if(!"1".equals(response.path("status"))){
                         //提交任务失败 todo 把设备还原回闲置
@@ -222,6 +222,7 @@ public class TestTaskService extends BaseService{
         ActionDTO actionDTO = new ActionDTO();
         BeanUtils.copyProperties(action,actionDTO);
         actionDTO.setAgentIp(deviceInfo.getAgentIp());
+        actionDTO.setAgentPort(deviceInfo.getAgentPort());
         actionDTO.setDeviceId(deviceInfo.getDeviceId());
         actionDTO.setPort(deviceInfo.getPort());
         //添加全局变量
@@ -283,15 +284,14 @@ public class TestTaskService extends BaseService{
                 threadPool.execute(()->{
                     try {
                         //请求打开UiAutomatorServer
-                        Response response = agentApi.openUiAutomatorServer(device.getAgentIp(), device.getDeviceId());
+                        Response response = agentApi.openUiAutomatorServer(device.getAgentIp(),device.getAgentPort(),device.getDeviceId());
                         log.info("[{}]打开UiautomatorServer -> {}",device.getDeviceId(),response.asString());
                         if("1".equals(response.path("status"))){
                             //设备UiAutomatorServer可用 并已开启
                             boolean canUse = response.path("data.canUse");
                             if(canUse){
                                 DeviceInfo deviceInfo = new DeviceInfo();
-                                deviceInfo.setAgentIp(device.getAgentIp());
-                                deviceInfo.setDeviceId(device.getDeviceId());
+                                BeanUtils.copyProperties(device,deviceInfo);
                                 deviceInfo.setCanUse(response.path("data.canUse"));
                                 deviceInfo.setPort(response.path("data.port"));
                                 deviceInfo.setMsg(response.path("data.msg"));
@@ -320,6 +320,7 @@ public class TestTaskService extends BaseService{
         private Boolean canUse;
         private String deviceId;
         private String agentIp;
+        private Integer agentPort;
         private Integer port;
         private String msg;
     }
