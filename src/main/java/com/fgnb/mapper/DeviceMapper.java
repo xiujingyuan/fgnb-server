@@ -22,14 +22,14 @@ public interface DeviceMapper {
 
     @Insert("insert into device " +
             "(" +
-            "deviceId,deviceName,phoneIp,agentIp,systemVersion,apiLevel," +
+            "deviceId,deviceName,phoneIp,agentIp,agentPort,systemVersion,apiLevel," +
             "cpuAbi,cpuInfo,memSize,resolution,imgUrl,deviceType,status," +
             "stfStatus,macacaStatus,lastOnlineTime,lastOfflineTime," +
             "userName,createTime" +
             ") " +
             "values" +
             "(" +
-            "#{deviceId},#{deviceName},#{phoneIp},#{agentIp},#{systemVersion},#{apiLevel}," +
+            "#{deviceId},#{deviceName},#{phoneIp},#{agentIp},#{agentPort},#{systemVersion},#{apiLevel}," +
             "#{cpuAbi},#{cpuInfo},#{memSize},#{resolution},#{imgUrl},#{deviceType},#{status}," +
             "#{stfStatus},#{macacaStatus},#{lastOnlineTime},#{lastOfflineTime},#{userName},#{createTime}" +
             ")")

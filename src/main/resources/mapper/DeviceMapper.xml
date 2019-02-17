@@ -15,6 +15,9 @@
         <if test="agentIp!=null">
             agentIp = #{agentIp},
         </if>
+        <if test="agentPort!=null">
+            agentPort = #{agentPort},
+        </if>
         <if test="systemVersion!=null">
             systemVersion = #{systemVersion},
         </if>
